@@ -20,6 +20,12 @@ func main() {
 		&models.Health{},
 		&models.Official{},
 		&models.Certificate{},
+		&models.Blotter{},
+		&models.Event{},
+		&models.Expense{},
+		&models.Income{},
+		&models.Setting{},
+		&models.User{},
 	); err != nil {
 		fmt.Println("Error Migrating")
 		return
