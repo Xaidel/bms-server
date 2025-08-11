@@ -27,5 +27,6 @@ func main() {
 	router.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "JSSL"})
 	})
+	APIRoutes(router)
 	router.Run()
 }
