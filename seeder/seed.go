@@ -4,18 +4,18 @@ import "server/src/models"
 
 var Users = []models.User{
 	{
-		Role:     "Barangay Captain",
-		Username: "Brgy. Captain",
-		Password: "admin",
+		Role:     "captain",
+		Username: "captain",
+		Password: "captain",
 	},
 	{
-		Role:     "Barangay Secretary",
-		Username: "Brgy. Secretary",
+		Role:     "secretary",
+		Username: "secretary",
 		Password: "secretary",
 	},
 	{
-		Role:     "Barangay Treasurer",
-		Username: "Brgy. Treasurer",
+		Role:     "treasurer",
+		Username: "treasurer",
 		Password: "treasurer",
 	},
 }
