@@ -85,3 +85,26 @@ func (ResidentController) Post(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"resident": resident})
 }
+
+func (ResidentController) Delete(ctx *gin.Context) {
+	residentReq := struct {
+		Residents []int `json:"ids" binding:"required"`
+	}{}
+
+	if err := ctx.ShouldBindJSON(&residentReq); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(residentReq.Residents) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please select a resident"})
+		return
+	}
+
+	if err := lib.Database.Delete(&models.Resident{}, residentReq.Residents).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, gin.H{})
+}
