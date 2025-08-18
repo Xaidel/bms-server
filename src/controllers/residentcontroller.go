@@ -42,9 +42,13 @@ func (ResidentController) Post(ctx *gin.Context) {
 		Status                string    `json:"Status" binding:"required"`
 		Birthplace            string    `json:"Birthplace" binding:"required"`
 		Zone                  uint      `json:"Zone" binding:"required"`
+		Barangay              string    `json:"barangay" binding:"required"`
+		Town                  string    `json:"town" binding:"required"`
+		Province              string    `json:"province" binding:"required"`
 		EducationalAttainment string    `json:"EducationalAttainment" binding:"required"`
 		Birthday              time.Time `json:"Birthday" binding:"required"`
 		IsVoter               bool      `json:"IsVoter"`
+		IsPwd                 bool      `json:"IsPwd"`
 		Image                 *[]byte   `json:"Image"`
 		Suffix                *string   `json:"Suffix"`
 		Occupation            *string   `json:"Occupation"`
@@ -70,8 +74,12 @@ func (ResidentController) Post(ctx *gin.Context) {
 		EducationalAttainment: residentReq.EducationalAttainment,
 		Birthday:              residentReq.Birthday,
 		IsVoter:               residentReq.IsVoter,
+		IsPWD:                 residentReq.IsPwd,
 		Image:                 residentReq.Image,
 		Zone:                  residentReq.Zone,
+		Barangay:              residentReq.Barangay,
+		Town:                  residentReq.Town,
+		Province:              residentReq.Province,
 		Suffix:                residentReq.Suffix,
 		Occupation:            residentReq.Occupation,
 		AvgIncome:             residentReq.AvgIncome,
@@ -107,4 +115,31 @@ func (ResidentController) Delete(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusNoContent, gin.H{})
+}
+
+func (ResidentController) Patch(ctx *gin.Context) {
+	var resident models.Resident
+
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please provide resident id"})
+		return
+	}
+
+	if err := lib.Database.First(&resident, id).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Resident not found"})
+		return
+	}
+
+	var patchData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&patchData); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := lib.Database.Model(&resident).Updates(patchData).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, resident)
 }

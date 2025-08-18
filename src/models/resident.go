@@ -14,6 +14,9 @@ type Resident struct {
 	Birthplace            string    `gorm:"not null"`
 	EducationalAttainment string    `gorm:"not null"`
 	Zone                  uint      `gorm:"not null"`
+	Barangay              string    `gorm:"not null"`
+	Town                  string    `gorm:"not null"`
+	Province              string    `gorm:"not null"`
 	Birthday              time.Time `gorm:"type:date;not null"`
 	IsVoter               bool      `gorm:"type:tinyint(1);default:0"`
 	IsPWD                 bool      `gorm:"type:tinyint(1)"`
