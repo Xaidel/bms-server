@@ -50,7 +50,7 @@ func (EventController) Post(ctx *gin.Context) {
 		Name:     eventReq.Name,
 		Type:     eventReq.Type,
 		Venue:    eventReq.Venue,
-		Audience: eventReq.Venue,
+		Audience: eventReq.Audience,
 		Notes:    eventReq.Notes,
 		Status:   eventReq.Status,
 		Date:     eventReq.Date,
@@ -62,6 +62,41 @@ func (EventController) Post(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"event": event})
+}
+
+func (EventController) Patch(ctx *gin.Context) {
+	var event models.Event
+
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please provide event id"})
+		return
+	}
+
+	if err := lib.Database.First(&event, id).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Event not found"})
+		return
+	}
+
+	var patchData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&patchData); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if dateStr, ok := patchData["Date"].(string); ok {
+		parsedData, err := time.Parse(time.RFC3339, dateStr)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format"})
+			return
+		}
+		patchData["Date"] = parsedData
+	}
+	if err := lib.Database.Model(&event).Updates(patchData).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, event)
 }
 
 func (EventController) Delete(ctx *gin.Context) {

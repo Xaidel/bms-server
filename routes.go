@@ -19,12 +19,14 @@ func APIRoutes(router *gin.Engine) {
 		{
 			resident.GET("", controller.Resident.Get)
 			resident.GET("/:id", controller.Resident.Get)
+			resident.POST("", controller.Resident.Post)
 		}
 		event := api.Group("/events")
 		{
 			event.GET("", controller.Event.Get)
 			event.GET("/:id", controller.Event.Get)
 			event.POST("", controller.Event.Post)
+			event.PATCH("/:id", controller.Event.Patch)
 			event.DELETE("", controller.Event.Delete)
 		}
 	}

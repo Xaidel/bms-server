@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"server/lib"
 	"server/src/models"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,4 +28,60 @@ func (ResidentController) Get(ctx *gin.Context) {
 		}
 		ctx.JSON(http.StatusOK, gin.H{"residents": residents})
 	}
+}
+
+func (ResidentController) Post(ctx *gin.Context) {
+	residentReq := struct {
+		Firstname             string    `json:"Firstname" binding:"required"`
+		Middlename            *string   `json:"Middlename"`
+		Lastname              string    `json:"Lastname" binding:"required"`
+		CivilStatus           string    `json:"CivilStatus" binding:"required"`
+		Gender                string    `json:"Gender" binding:"required"`
+		Nationality           string    `json:"Nationality" binding:"required"`
+		Religion              string    `json:"Religion" binding:"required"`
+		Status                string    `json:"Status" binding:"required"`
+		Birthplace            string    `json:"Birthplace" binding:"required"`
+		Zone                  uint      `json:"Zone" binding:"required"`
+		EducationalAttainment string    `json:"EducationalAttainment" binding:"required"`
+		Birthday              time.Time `json:"Birthday" binding:"required"`
+		IsVoter               bool      `json:"IsVoter"`
+		Image                 *[]byte   `json:"Image"`
+		Suffix                *string   `json:"Suffix"`
+		Occupation            *string   `json:"Occupation"`
+		AvgIncome             *float64  `json:"AvgIncome"`
+		MobileNumber          *string   `json:"MobileNumber"`
+	}{}
+
+	if err := ctx.ShouldBindBodyWithJSON(&residentReq); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resident := models.Resident{
+		Firstname:             residentReq.Firstname,
+		Middlename:            residentReq.Middlename,
+		Lastname:              residentReq.Lastname,
+		CivilStatus:           residentReq.CivilStatus,
+		Gender:                residentReq.Gender,
+		Nationality:           residentReq.Nationality,
+		Religion:              residentReq.Religion,
+		Status:                residentReq.Status,
+		Birthplace:            residentReq.Birthplace,
+		EducationalAttainment: residentReq.EducationalAttainment,
+		Birthday:              residentReq.Birthday,
+		IsVoter:               residentReq.IsVoter,
+		Image:                 residentReq.Image,
+		Zone:                  residentReq.Zone,
+		Suffix:                residentReq.Suffix,
+		Occupation:            residentReq.Occupation,
+		AvgIncome:             residentReq.AvgIncome,
+		MobileNumber:          residentReq.MobileNumber,
+	}
+
+	if err := lib.Database.Create(&resident).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"resident": resident})
 }
