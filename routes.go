@@ -31,5 +31,9 @@ func APIRoutes(router *gin.Engine) {
 			event.PATCH("/:id", controller.Event.Patch)
 			event.DELETE("", controller.Event.Delete)
 		}
+		household := api.Group("/household")
+		{
+			household.POST("", controller.Household.Post)
+		}
 	}
 }
