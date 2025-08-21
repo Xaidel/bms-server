@@ -27,6 +27,43 @@ type CreateHouseholdDTO struct {
 	Zone            string      `json:"zone"`
 }
 
+func (HouseholdController) Get(c *gin.Context) {
+	var households []models.Household
+	db := lib.Database
+
+	if err := db.Preload("Residents.Resident").Find(&households).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to fetch households", "error": err.Error()})
+		return
+	}
+
+	// Format response including roles
+	var result []gin.H
+	for _, h := range households {
+		residents := make([]gin.H, len(h.Residents))
+		for i, rh := range h.Residents {
+			residents[i] = gin.H{
+				"id":        rh.Resident.ID,
+				"firstname": rh.Resident.Firstname,
+				"lastname":  rh.Resident.Lastname,
+				"income":    rh.Resident.AvgIncome,
+				"role":      rh.Role,
+			}
+		}
+
+		result = append(result, gin.H{
+			"id":                h.ID,
+			"zone":              h.Zone,
+			"type":              h.Type,
+			"status":            h.Status,
+			"date_of_residency": h.DateOfResidency,
+			"household_number":  h.HouseholdNumber,
+			"residents":         residents,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"households": result})
+}
+
 func (HouseholdController) Post(ctx *gin.Context) {
 	var input CreateHouseholdDTO
 	if err := ctx.ShouldBindJSON(&input); err != nil {

@@ -33,6 +33,7 @@ func APIRoutes(router *gin.Engine) {
 		}
 		household := api.Group("/household")
 		{
+			household.GET("", controller.Household.Get)
 			household.POST("", controller.Household.Post)
 		}
 	}
