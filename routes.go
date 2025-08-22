@@ -31,10 +31,11 @@ func APIRoutes(router *gin.Engine) {
 			event.PATCH("/:id", controller.Event.Patch)
 			event.DELETE("", controller.Event.Delete)
 		}
-		household := api.Group("/household")
+		household := api.Group("/households")
 		{
 			household.GET("", controller.Household.Get)
 			household.POST("", controller.Household.Post)
+			household.DELETE("", controller.Household.Delete)
 		}
 	}
 }

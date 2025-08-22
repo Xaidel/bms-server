@@ -132,3 +132,26 @@ func (HouseholdController) Post(ctx *gin.Context) {
 		"message": "household created successfully",
 	})
 }
+
+func (HouseholdController) Delete(ctx *gin.Context) {
+	householdReq := struct {
+		Households []uint `json:"ids" binding:"required"`
+	}{}
+
+	if err := ctx.ShouldBindJSON(&householdReq); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(householdReq.Households) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please select a household"})
+		return
+	}
+
+	if err := lib.Database.Delete(&models.Household{}, householdReq.Households).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, gin.H{})
+}
