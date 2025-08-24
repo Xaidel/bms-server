@@ -87,16 +87,13 @@ func (HouseholdController) Post(ctx *gin.Context) {
 		}
 
 		for _, m := range input.Members {
-			// Check if resident already linked
 			var existing models.ResidentHousehold
 			if err := tx.Where("resident_id = ?", m.ID).First(&existing).Error; err == nil {
-				// Load resident info
 				var resident models.Resident
 				if err := tx.First(&resident, m.ID).Error; err != nil {
 					return fmt.Errorf("resident with ID %d already belongs to a household", m.ID)
 				}
 
-				// Construct full name with optional middlename and suffix
 				fullName := resident.Firstname
 				if resident.Middlename != nil && *resident.Middlename != "" {
 					fullName += " " + *resident.Middlename
