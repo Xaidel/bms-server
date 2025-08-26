@@ -7,4 +7,5 @@ type Controller struct {
 	Household HouseholdController
 	Income    IncomeController
 	Official  OfficialController
+	Expense   ExpenseController
 }

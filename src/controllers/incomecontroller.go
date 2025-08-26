@@ -33,16 +33,16 @@ func (IncomeController) Get(ctx *gin.Context) {
 
 func (IncomeController) Post(ctx *gin.Context) {
 	incomeReq := struct {
-		Category     string    `json:"category " binding:"required"`
-		Type         string    `json:"type" binding:"required"`
-		Amount       float64   `json:"amount" binding:"required"`
-		OR           string    `json:"or" binding:"required"`
-		ReceivedFrom string    `json:"receivedFrom" binding:"required"`
-		ReceivedBy   string    `json:"receivedBy" binding:"required"`
-		DateReceived time.Time `json:"dateReceived" binding:"required"`
+		Category     string    `json:"Category" binding:"required"`
+		Type         string    `json:"Type" binding:"required"`
+		Amount       float64   `json:"Amount" binding:"required"`
+		OR           string    `json:"OR" binding:"required"`
+		ReceivedFrom string    `json:"ReceivedFrom" binding:"required"`
+		ReceivedBy   string    `json:"ReceivedBy" binding:"required"`
+		DateReceived time.Time `json:"DateReceived" binding:"required"`
 	}{}
 
-	if err := ctx.ShouldBindBodyWithJSON(&incomeReq); err != nil {
+	if err := ctx.ShouldBindJSON(&incomeReq); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

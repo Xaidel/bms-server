@@ -41,6 +41,7 @@ func APIRoutes(router *gin.Engine) {
 		{
 			income.GET("", controller.Income.Get)
 			income.GET("/:id", controller.Income.Get)
+			income.POST("", controller.Income.Post)
 		}
 		official := api.Group("/officials")
 		{
