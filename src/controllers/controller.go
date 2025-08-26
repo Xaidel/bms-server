@@ -5,4 +5,6 @@ type Controller struct {
 	Resident  ResidentController
 	Event     EventController
 	Household HouseholdController
+	Income    IncomeController
+	Official  OfficialController
 }
