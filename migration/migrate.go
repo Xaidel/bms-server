@@ -26,6 +26,7 @@ func main() {
 		&models.Income{},
 		&models.Setting{},
 		&models.User{},
+		&models.Mapping{},
 	); err != nil {
 		fmt.Println("Error Migrating")
 		return

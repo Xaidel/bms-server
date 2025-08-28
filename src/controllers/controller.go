@@ -8,4 +8,5 @@ type Controller struct {
 	Income    IncomeController
 	Official  OfficialController
 	Expense   ExpenseController
+	Mapping   MappingController
 }
