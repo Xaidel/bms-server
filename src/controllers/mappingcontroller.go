@@ -12,7 +12,7 @@ type MappingController struct{}
 
 func (MappingController) Get(ctx *gin.Context) {
 	var mappings []models.Mapping
-	if err := lib.Database.Find(&mappings).Error; err != nil {
+	if err := lib.Database.Preload("Household.Residents.Resident").Find(&mappings).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
