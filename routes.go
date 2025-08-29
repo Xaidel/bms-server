@@ -59,5 +59,9 @@ func APIRoutes(router *gin.Engine) {
 			official.PATCH("/:id", controller.Official.Patch)
 			official.DELETE("", controller.Official.Delete)
 		}
+		mapping := api.Group("/mappings")
+		{
+			mapping.GET("", controller.Mapping.Get)
+		}
 	}
 }

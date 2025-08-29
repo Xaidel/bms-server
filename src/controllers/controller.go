@@ -9,4 +9,5 @@ type Controller struct {
 	Official  OfficialController
 	Expense   ExpenseController
 	Logbook   LogbookController
+	Mapping   MappingController
 }

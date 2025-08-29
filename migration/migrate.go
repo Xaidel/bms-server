@@ -27,6 +27,7 @@ func main() {
 		&models.Logbook{},
 		&models.Setting{},
 		&models.User{},
+		&models.Mapping{},
 	); err != nil {
 		fmt.Println("Error Migrating")
 		return
