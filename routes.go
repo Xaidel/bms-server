@@ -34,6 +34,7 @@ func APIRoutes(router *gin.Engine) {
 		household := api.Group("/households")
 		{
 			household.GET("", controller.Household.Get)
+			household.GET("/:id", controller.Household.GetOne)
 			household.POST("", controller.Household.Post)
 			household.DELETE("", controller.Household.Delete)
 		}
@@ -42,6 +43,14 @@ func APIRoutes(router *gin.Engine) {
 			income.GET("", controller.Income.Get)
 			income.GET("/:id", controller.Income.Get)
 			income.POST("", controller.Income.Post)
+			income.DELETE("", controller.Income.Delete)
+		}
+		expense := api.Group("/expenses")
+		{
+			expense.GET("", controller.Expense.Get)
+			expense.GET("/:id", controller.Expense.Get)
+			expense.POST("", controller.Expense.Post)
+			expense.DELETE("", controller.Expense.Delete)
 		}
 		logbook := api.Group("/logbooks")
 		{
