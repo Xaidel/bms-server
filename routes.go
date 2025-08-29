@@ -43,9 +43,21 @@ func APIRoutes(router *gin.Engine) {
 			income.GET("/:id", controller.Income.Get)
 			income.POST("", controller.Income.Post)
 		}
+		logbook := api.Group("/logbooks")
+		{
+			logbook.GET("", controller.Logbook.Get)
+			logbook.GET("/:id", controller.Logbook.Get)
+			logbook.POST("", controller.Logbook.Post)
+			logbook.PATCH("/:id", controller.Logbook.Patch)
+			logbook.DELETE("", controller.Logbook.Delete)
+		}
 		official := api.Group("/officials")
 		{
 			official.GET("", controller.Official.Get)
+			official.GET("/:id", controller.Official.Get)
+			official.POST("", controller.Official.Post)
+			official.PATCH("/:id", controller.Official.Patch)
+			official.DELETE("", controller.Official.Delete)
 		}
 	}
 }

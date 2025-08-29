@@ -20,6 +20,8 @@ type Resident struct {
 	Birthday              time.Time `gorm:"type:date;not null"`
 	IsVoter               bool      `gorm:"type:tinyint(1);default:0"`
 	IsPWD                 bool      `gorm:"type:tinyint(1)"`
+	IsSolo                bool      `gorm:"type:tinyint(1)"`
+	IsSenior              bool      `gorm:"type:tinyint(1)"`
 	Image                 *[]byte   `gorm:"type:blob"`
 	Suffix                *string
 	Occupation            *string

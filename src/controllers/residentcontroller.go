@@ -49,6 +49,8 @@ func (ResidentController) Post(ctx *gin.Context) {
 		Birthday              time.Time `json:"Birthday" binding:"required"`
 		IsVoter               bool      `json:"IsVoter"`
 		IsPwd                 bool      `json:"IsPwd"`
+		IsSenior              bool      `json:"IsSenior"`
+		IsSolo                bool      `json:"IsSolo"`
 		Image                 *[]byte   `json:"Image"`
 		Suffix                *string   `json:"Suffix"`
 		Occupation            *string   `json:"Occupation"`
@@ -75,6 +77,8 @@ func (ResidentController) Post(ctx *gin.Context) {
 		Birthday:              residentReq.Birthday,
 		IsVoter:               residentReq.IsVoter,
 		IsPWD:                 residentReq.IsPwd,
+		IsSenior:              residentReq.IsSenior,
+		IsSolo:                residentReq.IsSolo,
 		Image:                 residentReq.Image,
 		Zone:                  residentReq.Zone,
 		Barangay:              residentReq.Barangay,

@@ -24,6 +24,7 @@ func main() {
 		&models.Event{},
 		&models.Expense{},
 		&models.Income{},
+		&models.Logbook{},
 		&models.Setting{},
 		&models.User{},
 	); err != nil {
