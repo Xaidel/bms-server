@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"server/lib"
@@ -62,6 +63,48 @@ func (HouseholdController) Get(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"households": result})
+}
+
+func (HouseholdController) GetOne(c *gin.Context) {
+	id := c.Param("id") // assuming you pass /households/:id
+
+	var household models.Household
+	db := lib.Database
+
+	// Find one household with preloaded residents
+	if err := db.Preload("Residents.Resident").First(&household, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Household not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to fetch household", "error": err.Error()})
+		}
+		return
+	}
+
+	// Format residents
+	residents := make([]gin.H, len(household.Residents))
+	for i, rh := range household.Residents {
+		residents[i] = gin.H{
+			"id":        rh.Resident.ID,
+			"firstname": rh.Resident.Firstname,
+			"lastname":  rh.Resident.Lastname,
+			"income":    rh.Resident.AvgIncome,
+			"role":      rh.Role,
+		}
+	}
+
+	// Format household response
+	result := gin.H{
+		"id":                household.ID,
+		"zone":              household.Zone,
+		"type":              household.Type,
+		"status":            household.Status,
+		"date_of_residency": household.DateOfResidency,
+		"household_number":  household.HouseholdNumber,
+		"residents":         residents,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"household": result})
 }
 
 func (HouseholdController) Post(ctx *gin.Context) {
