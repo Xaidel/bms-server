@@ -8,5 +8,7 @@ type Controller struct {
 	Income    IncomeController
 	Official  OfficialController
 	Expense   ExpenseController
+	Logbook   LogbookController
 	Mapping   MappingController
+	Setting   SettingController
 }
