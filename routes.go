@@ -62,6 +62,14 @@ func APIRoutes(router *gin.Engine) {
 			logbook.PATCH("/:id", controller.Logbook.Patch)
 			logbook.DELETE("", controller.Logbook.Delete)
 		}
+		blotter := api.Group("/blotters")
+		{
+			blotter.GET("", controller.Blotter.Get)
+			blotter.GET("/:id", controller.Blotter.Get)
+			blotter.POST("", controller.Blotter.Post)
+			blotter.PATCH("/:id", controller.Blotter.Patch)
+			blotter.DELETE("", controller.Blotter.Delete)
+		}
 		official := api.Group("/officials")
 		{
 			official.GET("", controller.Official.Get)

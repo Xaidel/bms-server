@@ -1,5 +1,3 @@
-// controllers/settingcontroller.go
-
 package controllers
 
 import (
