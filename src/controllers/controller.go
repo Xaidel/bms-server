@@ -10,4 +10,5 @@ type Controller struct {
 	Expense   ExpenseController
 	Logbook   LogbookController
 	Mapping   MappingController
+	Setting   SettingController
 }

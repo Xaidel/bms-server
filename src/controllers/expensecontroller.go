@@ -33,13 +33,13 @@ func (ExpenseController) Get(ctx *gin.Context) {
 
 func (ExpenseController) Post(ctx *gin.Context) {
 	expenseReq := struct {
-		Category     string    `json:"Category" binding:"required"`
-		Type         string    `json:"Type" binding:"required"`
-		Amount       float64   `json:"Amount" binding:"required"`
-		OR           string    `json:"OR" binding:"required"`
-		PaidTo       string    `json:"PaidTo" binding:"required"`
-		PaidBy       string    `json:"PaidBy" binding:"required"`
-		DateReceived time.Time `json:"DateReceived" binding:"required"`
+		Category string    `json:"Category" binding:"required"`
+		Type     string    `json:"Type" binding:"required"`
+		Amount   float64   `json:"Amount" binding:"required"`
+		OR       string    `json:"OR" binding:"required"`
+		PaidTo   string    `json:"PaidTo" binding:"required"`
+		PaidBy   string    `json:"PaidBy" binding:"required"`
+		Date     time.Time `json:"Date" binding:"required"`
 	}{}
 
 	if err := ctx.ShouldBindJSON(&expenseReq); err != nil {
@@ -48,13 +48,13 @@ func (ExpenseController) Post(ctx *gin.Context) {
 	}
 
 	expense := models.Expense{
-		Category:     expenseReq.Category,
-		Type:         expenseReq.Type,
-		Amount:       expenseReq.Amount,
-		OR:           expenseReq.OR,
-		PaidTo:       expenseReq.PaidTo,
-		PaidBy:       expenseReq.PaidBy,
-		DateReceived: expenseReq.DateReceived,
+		Category: expenseReq.Category,
+		Type:     expenseReq.Type,
+		Amount:   expenseReq.Amount,
+		OR:       expenseReq.OR,
+		PaidTo:   expenseReq.PaidTo,
+		PaidBy:   expenseReq.PaidBy,
+		Date:     expenseReq.Date,
 	}
 
 	if err := lib.Database.Create(&expense).Error; err != nil {
@@ -69,9 +69,8 @@ func (ExpenseController) Patch(ctx *gin.Context) {
 	var expense models.Expense
 
 	id := ctx.Param("id")
-
 	if id == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please provide the expense id"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please provide expense id"})
 		return
 	}
 
@@ -81,20 +80,19 @@ func (ExpenseController) Patch(ctx *gin.Context) {
 	}
 
 	var patchData map[string]interface{}
-
 	if err := ctx.ShouldBindJSON(&patchData); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if dateStr, ok := patchData["DateReceived"].(string); ok {
+
+	if dateStr, ok := patchData["Date"].(string); ok {
 		parsedData, err := time.Parse(time.RFC3339, dateStr)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format"})
 			return
 		}
-		patchData["DateReceived"] = parsedData
+		patchData["Date"] = parsedData
 	}
-
 	if err := lib.Database.Model(&expense).Updates(patchData).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -118,8 +116,9 @@ func (ExpenseController) Delete(ctx *gin.Context) {
 	}
 
 	if err := lib.Database.Delete(&models.Expense{}, expenseReq.Expenses).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	ctx.JSON(http.StatusNoContent, gin.H{})
 }

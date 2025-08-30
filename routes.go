@@ -43,6 +43,7 @@ func APIRoutes(router *gin.Engine) {
 			income.GET("", controller.Income.Get)
 			income.GET("/:id", controller.Income.Get)
 			income.POST("", controller.Income.Post)
+			income.PATCH("/:id", controller.Income.Patch)
 			income.DELETE("", controller.Income.Delete)
 		}
 		expense := api.Group("/expenses")
@@ -50,6 +51,7 @@ func APIRoutes(router *gin.Engine) {
 			expense.GET("", controller.Expense.Get)
 			expense.GET("/:id", controller.Expense.Get)
 			expense.POST("", controller.Expense.Post)
+			expense.PATCH("/:id", controller.Expense.Patch)
 			expense.DELETE("", controller.Expense.Delete)
 		}
 		logbook := api.Group("/logbooks")
@@ -67,6 +69,14 @@ func APIRoutes(router *gin.Engine) {
 			official.POST("", controller.Official.Post)
 			official.PATCH("/:id", controller.Official.Patch)
 			official.DELETE("", controller.Official.Delete)
+		}
+		setting := api.Group("/settings")
+		{
+			setting.GET("", controller.Setting.Get)
+			setting.GET("/:id", controller.Setting.Get)
+			setting.POST("", controller.Setting.Post)
+			setting.PATCH("/:id", controller.Setting.Patch)
+			setting.DELETE("", controller.Setting.Delete)
 		}
 		mapping := api.Group("/mappings")
 		{

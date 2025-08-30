@@ -83,6 +83,7 @@ func (IncomeController) Patch(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	if dateStr, ok := patchData["DateReceived"].(string); ok {
 		parsedData, err := time.Parse(time.RFC3339, dateStr)
 		if err != nil {
@@ -91,7 +92,6 @@ func (IncomeController) Patch(ctx *gin.Context) {
 		}
 		patchData["DateReceived"] = parsedData
 	}
-
 	if err := lib.Database.Model(&income).Updates(patchData).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

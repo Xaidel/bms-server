@@ -40,7 +40,7 @@ func (OfficialController) Post(ctx *gin.Context) {
 		Age       int       `json:"Age"`
 		Contact   string    `json:"Contact"`
 		TermStart time.Time `json:"TermStart" binding:"required"`
-		TermEnd   time.Time `json:"TermEnd"`
+		TermEnd   time.Time `json:"TermEnd" binding:"required"`
 		Zone      string    `json:"Zone"`
 	}{}
 
@@ -87,21 +87,22 @@ func (OfficialController) Patch(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if dateStr, ok := patchData["StartDate"].(string); ok {
+
+	if dateStr, ok := patchData["TermStart"].(string); ok {
 		parsedData, err := time.Parse(time.RFC3339, dateStr)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format"})
 			return
 		}
-		patchData["StartDate"] = parsedData
+		patchData["TermStart"] = parsedData.Format("2006-01-02")
 	}
-	if dateStr, ok := patchData["EndDate"].(string); ok {
+	if dateStr, ok := patchData["TermEnd"].(string); ok {
 		parsedData, err := time.Parse(time.RFC3339, dateStr)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format"})
 			return
 		}
-		patchData["EndDate"] = parsedData
+		patchData["TermEnd"] = parsedData.Format("2006-01-02")
 	}
 
 	if err := lib.Database.Model(&official).Updates(patchData).Error; err != nil {
