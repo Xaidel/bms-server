@@ -11,4 +11,5 @@ type Controller struct {
 	Logbook   LogbookController
 	Mapping   MappingController
 	Setting   SettingController
+	Blotter   BlotterController
 }
