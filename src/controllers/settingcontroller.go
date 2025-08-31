@@ -3,6 +3,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"server/lib"
 	"server/src/models"
@@ -46,13 +47,31 @@ func (SettingController) Get(ctx *gin.Context) {
 
 // POST /settings
 func (SettingController) Post(ctx *gin.Context) {
-	var settingReq models.Setting
+	var settingReq struct {
+		Barangay     string `json:"Barangay" binding:"required"`
+		Email        string `json:"Email" binding:"required"`
+		ImageB       string `json:"ImageB" binding:"required"`
+		ImageM       string `json:"ImageM" binding:"required"`
+		Municipality string `json:"Municipality" binding:"required"`
+		PhoneNumber  string `json:"PhoneNumber" binding:"required"`
+		Province     string `json:"Province" binding:"required"`
+	}
 	if err := ctx.ShouldBindJSON(&settingReq); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := lib.Database.Create(&settingReq).Error; err != nil {
+	setting := models.Setting{
+		Barangay:     settingReq.Barangay,
+		Email:        settingReq.Email,
+		ImageB:       settingReq.ImageB,
+		ImageM:       settingReq.ImageM,
+		Municipality: settingReq.Municipality,
+		PhoneNumber:  settingReq.PhoneNumber,
+		Province:     settingReq.Province,
+	}
+	fmt.Println(setting.PhoneNumber)
+	if err := lib.Database.Create(&setting).Error; err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
