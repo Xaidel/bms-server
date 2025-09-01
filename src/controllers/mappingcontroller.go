@@ -18,3 +18,31 @@ func (MappingController) Get(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"mappings": mappings})
 }
+
+func (MappingController) Post(ctx *gin.Context) {
+	mapReq := struct {
+		HouseholdID *uint  `json:"HouseholdID" binding:"required"`
+		MappingName string `json:"MappingName" binding:"required"`
+		Type        string `json:"Type" binding:"required"`
+		FID         uint   `json:"FID" binding:"required"`
+	}{}
+
+	if err := ctx.ShouldBindJSON(&mapReq); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	mapping := models.Mapping{
+		MappingName: mapReq.MappingName,
+		Type:        mapReq.Type,
+		HouseholdID: mapReq.HouseholdID,
+		FID:         mapReq.FID,
+	}
+
+	if err := lib.Database.Create(&mapping).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"mapping": mapping})
+}

@@ -81,6 +81,7 @@ func APIRoutes(router *gin.Engine) {
 		mapping := api.Group("/mappings")
 		{
 			mapping.GET("", controller.Mapping.Get)
+			mapping.POST("", controller.Mapping.Post)
 		}
 	}
 }
