@@ -31,6 +31,14 @@ func APIRoutes(router *gin.Engine) {
 			event.PATCH("/:id", controller.Event.Patch)
 			event.DELETE("", controller.Event.Delete)
 		}
+		certificate := api.Group("/certificates")
+		{
+			certificate.GET("", controller.Certificate.Get)
+			certificate.GET("/:id", controller.Certificate.Get)
+			certificate.POST("", controller.Certificate.Post)
+			certificate.PATCH("/:id", controller.Certificate.Patch)
+			certificate.DELETE("", controller.Certificate.Delete)
+		}
 		household := api.Group("/households")
 		{
 			household.GET("", controller.Household.Get)
