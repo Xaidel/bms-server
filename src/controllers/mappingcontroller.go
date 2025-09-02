@@ -21,7 +21,7 @@ func (MappingController) Get(ctx *gin.Context) {
 
 func (MappingController) Post(ctx *gin.Context) {
 	mapReq := struct {
-		HouseholdID *uint  `json:"HouseholdID" binding:"required"`
+		HouseholdID *uint  `json:"HouseholdID"`
 		MappingName string `json:"MappingName" binding:"required"`
 		Type        string `json:"Type" binding:"required"`
 		FID         uint   `json:"FID" binding:"required"`
