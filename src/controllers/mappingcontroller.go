@@ -32,6 +32,13 @@ func (MappingController) Post(ctx *gin.Context) {
 		return
 	}
 
+	if mapReq.HouseholdID != nil {
+		var count int64
+		if err := lib.Database.Model(&models.Household{}).Where("id = ?", *mapReq.HouseholdID).Count(&count).Error; err != nil || count == 0 {
+			mapReq.HouseholdID = nil
+		}
+	}
+
 	mapping := models.Mapping{
 		MappingName: mapReq.MappingName,
 		Type:        mapReq.Type,
