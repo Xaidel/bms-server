@@ -21,7 +21,7 @@ func (MappingController) Get(ctx *gin.Context) {
 
 func (MappingController) Post(ctx *gin.Context) {
 	mapReq := struct {
-		HouseholdID *uint  `json:"HouseholdID"`
+		HouseholdID *uint  `json:"HouseholdID" `
 		MappingName string `json:"MappingName" binding:"required"`
 		Type        string `json:"Type" binding:"required"`
 		FID         uint   `json:"FID" binding:"required"`
@@ -30,6 +30,13 @@ func (MappingController) Post(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&mapReq); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	if mapReq.HouseholdID != nil {
+		var count int64
+		if err := lib.Database.Model(&models.Household{}).Where("id = ?", *mapReq.HouseholdID).Count(&count).Error; err != nil || count == 0 {
+			mapReq.HouseholdID = nil
+		}
 	}
 
 	mapping := models.Mapping{
