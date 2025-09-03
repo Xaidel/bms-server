@@ -188,10 +188,86 @@ func (HouseholdController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	if err := lib.Database.Delete(&models.Household{}, householdReq.Households).Error; err != nil {
+	db := lib.Database
+	err := db.Transaction(func(tx *gorm.DB) error {
+		// delete child rows first
+		if err := tx.Where("household_id IN ?", householdReq.Households).
+			Delete(&models.ResidentHousehold{}).Error; err != nil {
+			return err
+		}
+
+		// delete households
+		if err := tx.Delete(&models.Household{}, householdReq.Households).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusNoContent, gin.H{})
+}
+
+func (HouseholdController) Patch(ctx *gin.Context) {
+	id := ctx.Param("id")
+	var input CreateHouseholdDTO
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	db := lib.Database
+	var household models.Household
+
+	if err := db.First(&household, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Household not found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		// update household fields
+		household.HouseholdNumber = input.HouseholdNumber
+		household.Zone = input.Zone
+		household.Type = input.HouseholdType
+		household.Status = input.Status
+		household.DateOfResidency = input.DateOfResidency
+
+		if err := tx.Save(&household).Error; err != nil {
+			return err
+		}
+
+		// clear existing members
+		if err := tx.Where("household_id = ?", household.ID).Delete(&models.ResidentHousehold{}).Error; err != nil {
+			return err
+		}
+
+		// re-add members
+		for _, m := range input.Members {
+			rh := models.ResidentHousehold{
+				HouseholdID: household.ID,
+				ResidentID:  m.ID,
+				Role:        m.Role,
+			}
+			if err := tx.Create(&rh).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "household updated successfully"})
 }

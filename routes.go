@@ -44,6 +44,7 @@ func APIRoutes(router *gin.Engine) {
 			household.GET("", controller.Household.Get)
 			household.GET("/:id", controller.Household.GetOne)
 			household.POST("", controller.Household.Post)
+			household.PATCH("/:id", controller.Household.Patch)
 			household.DELETE("", controller.Household.Delete)
 		}
 		income := api.Group("/incomes")
