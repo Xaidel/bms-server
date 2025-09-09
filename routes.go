@@ -99,6 +99,7 @@ func APIRoutes(router *gin.Engine) {
 		{
 			mapping.GET("", controller.Mapping.Get)
 			mapping.POST("", controller.Mapping.Post)
+			mapping.DELETE("/:id", controller.Mapping.Delete)
 		}
 	}
 }
