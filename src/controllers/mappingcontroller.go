@@ -53,3 +53,21 @@ func (MappingController) Post(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"mapping": mapping})
 }
+
+func (MappingController) Delete(ctx *gin.Context) {
+	id := struct {
+		id int `json:"id" binding:"required"`
+	}{}
+
+	if err := ctx.ShouldBindJSON(&id); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := lib.Database.Delete(&models.Mapping{}, id).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, gin.H{})
+}
