@@ -1,4 +1,4 @@
-package main
+package seeder
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func init() {
 	lib.ConnectDatabase()
 }
 
-func seedUser() {
+func SeedUser() {
 	fmt.Println("-----Seeding Initial User-----")
 	for _, user := range Users {
 		hashPassword, err := services.Encrypt(user.Password)
@@ -26,8 +26,4 @@ func seedUser() {
 		}
 	}
 	fmt.Println("-----Done Seeding User-----")
-}
-
-func main() {
-	seedUser()
 }
