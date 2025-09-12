@@ -20,12 +20,12 @@ type MemberDTO struct {
 }
 
 type CreateHouseholdDTO struct {
-	DateOfResidency time.Time   `json:"dateOfResidency"`
-	HouseholdNumber string      `json:"householdNumber"`
-	HouseholdType   string      `json:"householdType"`
-	Members         []MemberDTO `json:"members"`
-	Status          string      `json:"status"`
-	Zone            string      `json:"zone"`
+	DateOfResidency time.Time   `json:"Date"`
+	HouseholdNumber string      `json:"HouseNumber"`
+	HouseholdType   string      `json:"Type"`
+	Members         []MemberDTO `json:"Member"`
+	Status          string      `json:"Status"`
+	Zone            string      `json:"Zone"`
 }
 
 func (HouseholdController) Get(c *gin.Context) {

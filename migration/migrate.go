@@ -1,4 +1,4 @@
-package main
+package migration
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func init() {
 	lib.ConnectDatabase()
 }
 
-func main() {
+func Migrate() {
 	if err := lib.Database.AutoMigrate(
 		&models.Resident{},
 		&models.Household{},
