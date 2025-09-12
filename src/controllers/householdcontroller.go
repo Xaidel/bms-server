@@ -113,6 +113,15 @@ func (HouseholdController) Post(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	// Validation: prevent empty or invalid fields
+	if input.HouseholdNumber == "" || input.HouseholdType == "" || input.Zone == "" || input.Status == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "All fields are required"})
+		return
+	}
+	if input.DateOfResidency.IsZero() {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date of residency"})
+		return
+	}
 
 	db := lib.Database
 
