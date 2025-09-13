@@ -12,6 +12,13 @@ import (
 	"gorm.io/gorm"
 )
 
+func strPtrToStr(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
 type HouseholdController struct{}
 
 type MemberDTO struct {
@@ -146,14 +153,10 @@ func (HouseholdController) Post(ctx *gin.Context) {
 					return fmt.Errorf("resident with ID %d already belongs to a household", m.ID)
 				}
 
-				fullName := resident.Firstname
-				if resident.Middlename != nil && *resident.Middlename != "" {
-					fullName += " " + *resident.Middlename
-				}
-				fullName += " " + resident.Lastname
-				if resident.Suffix != nil && *resident.Suffix != "" {
-					fullName += " " + *resident.Suffix
-				}
+				fullName := strPtrToStr(resident.Firstname) +
+					" " + strPtrToStr(resident.Middlename) +
+					" " + strPtrToStr(resident.Lastname) +
+					" " + strPtrToStr(resident.Suffix)
 
 				return fmt.Errorf("resident %s already belongs to a household", fullName)
 			} else if err != gorm.ErrRecordNotFound {
