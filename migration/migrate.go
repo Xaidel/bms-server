@@ -28,6 +28,7 @@ func Migrate() {
 		&models.Setting{},
 		&models.User{},
 		&models.Mapping{},
+		&models.ProgramProject{},
 	); err != nil {
 		fmt.Println("Error Migrating")
 		return
