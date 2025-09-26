@@ -101,5 +101,13 @@ func APIRoutes(router *gin.Engine) {
 			mapping.POST("", controller.Mapping.Post)
 			mapping.DELETE("/:id", controller.Mapping.Delete)
 		}
+		programProject := api.Group("/program-projects")
+		{
+			programProject.GET("", controller.ProgramProject.Get)
+			programProject.GET("/:id", controller.ProgramProject.Get)
+			programProject.POST("", controller.ProgramProject.Post)
+			programProject.PATCH("/:id", controller.ProgramProject.Patch)
+			programProject.DELETE("", controller.ProgramProject.Delete)
+		}
 	}
 }
