@@ -33,17 +33,17 @@ func (ProgramProjectController) Get(ctx *gin.Context) {
 
 func (ProgramProjectController) Post(ctx *gin.Context) {
 	req := struct {
-		Name           string     `json:"name" binding:"required"`
-		Type           string     `json:"type" binding:"required"`
-		Description    string     `json:"description"`
-		StartDate      time.Time  `json:"start_date" binding:"required"`
-		EndDate        *time.Time `json:"end_date"`
-		Location       string     `json:"location" binding:"required"`
-		Beneficiaries  string     `json:"beneficiaries"`
-		Budget         float64    `json:"budget" binding:"required"`
-		SourceOfFunds  string     `json:"source_of_funds"`
-		ProjectManager string     `json:"project_manager"`
-		Status         string     `json:"status" binding:"required"`
+		Name           string     `json:"Name" binding:"required"`
+		Type           string     `json:"Type" binding:"required"`
+		Description    string     `json:"Description"`
+		StartDate      time.Time  `json:"StartDate" binding:"required"`
+		EndDate        *time.Time `json:"EndDate"`
+		Location       string     `json:"Location" binding:"required"`
+		Beneficiaries  string     `json:"Beneficiaries"`
+		Budget         float64    `json:"Budget" binding:"required"`
+		SourceOfFunds  string     `json:"SourceOfFunds"`
+		ProjectManager string     `json:"ProjectManager"`
+		Status         string     `json:"Status" binding:"required"`
 	}{}
 
 	if err := ctx.ShouldBindBodyWithJSON(&req); err != nil {
