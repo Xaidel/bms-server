@@ -14,4 +14,5 @@ type Controller struct {
 	Blotter        BlotterController
 	Certificate    CertificateController
 	ProgramProject ProgramProjectController
+	GovDocs        GovDocsController
 }
