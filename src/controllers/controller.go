@@ -15,4 +15,5 @@ type Controller struct {
 	Certificate    CertificateController
 	ProgramProject ProgramProjectController
 	GovDocs        GovDocsController
+	Youth          YouthController
 }
