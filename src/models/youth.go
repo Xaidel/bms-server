@@ -9,6 +9,7 @@ type Youth struct {
 	Lastname               *string    `json:"Lastname"`
 	Suffix                 *string    `json:"Suffix"`
 	Gender                 *string    `json:"Gender"`
+	CivilStatus            string     `json:"CivilStatus"`
 	Birthday               *time.Time `json:"Birthday"`
 	Zone                   *uint      `json:"Zone"`
 	Address                *string    `json:"Address"`
