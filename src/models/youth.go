@@ -11,6 +11,7 @@ type Youth struct {
 	Gender                 *string    `json:"Gender"`
 	CivilStatus            string     `json:"CivilStatus"`
 	Birthday               *time.Time `json:"Birthday"`
+	AgeGroup               *string    `json:"AgeGroup"`
 	Zone                   *uint      `json:"Zone"`
 	Address                *string    `json:"Address"`
 	EmailAddress           *string    `json:"EmailAddress"`

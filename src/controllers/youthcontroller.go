@@ -40,6 +40,7 @@ func (YouthController) Post(ctx *gin.Context) {
 		Suffix                 *string    `json:"Suffix"`
 		Gender                 string     `json:"Gender"`
 		Birthday               *time.Time `json:"Birthday"`
+		AgeGroup               *string    `json:"AgeGroup"`
 		Zone                   *uint      `json:"Zone"`
 		Address                *string    `json:"Address"`
 		EmailAddress           *string    `json:"EmailAddress"`
@@ -66,6 +67,7 @@ func (YouthController) Post(ctx *gin.Context) {
 		Suffix:                 youthReq.Suffix,
 		Gender:                 &youthReq.Gender,
 		Birthday:               youthReq.Birthday,
+		AgeGroup:               youthReq.AgeGroup,
 		Zone:                   youthReq.Zone,
 		Address:                youthReq.Address,
 		EmailAddress:           youthReq.EmailAddress,
