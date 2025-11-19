@@ -14,7 +14,6 @@ type Resident struct {
 	Birthplace            *string    `gorm:"not null"`
 	EducationalAttainment *string    `gorm:"not null"`
 	Zone                  *uint      `gorm:"not null"`
-	Municipality          *string    `gorm:"not null"`
 	Barangay              *string    `gorm:"not null"`
 	Town                  *string    `gorm:"not null"`
 	Province              *string    `gorm:"not null"`

@@ -42,7 +42,6 @@ func (ResidentController) Post(ctx *gin.Context) {
 		Status                string    `json:"Status" binding:"required"`
 		Birthplace            string    `json:"Birthplace" binding:"required"`
 		Zone                  uint      `json:"Zone" binding:"required"`
-		Municipality          string    `json:"Municipality" binding:"required"`
 		Barangay              string    `json:"barangay" binding:"required"`
 		Town                  string    `json:"town" binding:"required"`
 		Province              string    `json:"province" binding:"required"`
@@ -82,7 +81,6 @@ func (ResidentController) Post(ctx *gin.Context) {
 		IsSolo:                &residentReq.IsSolo,
 		Image:                 residentReq.Image,
 		Zone:                  &residentReq.Zone,
-		Municipality:          &residentReq.Municipality,
 		Barangay:              &residentReq.Barangay,
 		Town:                  &residentReq.Town,
 		Province:              &residentReq.Province,
